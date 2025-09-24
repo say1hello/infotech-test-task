@@ -19,15 +19,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-        <?= Html::a(
+        <?php if (!Yii::$app->user->isGuest): ?>
+            <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php else: ?>
+            <?= Html::a(
                 'Подписаться на обновления',
                 ['subscribe', 'id' => $model->id],
                 [
@@ -36,7 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-bs-toggle' => 'modal',
                     'title' => 'Оформить подписку на автора',
                 ]
-        ); ?>
+            ); ?>
+        <?php endif; ?>
     </p>
 
     <?= DetailView::widget([
