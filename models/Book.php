@@ -4,7 +4,9 @@ namespace app\models;
 
 use app\services\SubscribeService;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
+use yii\httpclient\Exception;
 
 /**
  * This is the model class for table "book".
@@ -96,14 +98,19 @@ class Book extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @throws Exception
+     * @throws InvalidConfigException
+     */
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
 
         if ($insert) {
             foreach ($this->authors as $author) {
+                $text = "У автора $author->name вышла новая книга '$this->title'";
                 foreach ($author->subscribers as $subscriber) {
-                    SubscribeService::notify($subscriber->phone, $author->name, $this->title);
+                    SubscribeService::notify($subscriber->phone, $text);
                 }
             }
         }

@@ -12,10 +12,8 @@ class SubscribeService
      * @throws Exception
      * @throws InvalidConfigException
      */
-    public static function notify(string $phone, string $authorName, string $bookTitle): void
+    public static function notify(string $phone, string $text): void
     {
-        $text = "У автора $authorName вышла новая книга '$bookTitle'";
-
         $client = new Client();
         $client->createRequest()
             ->setMethod('GET')
